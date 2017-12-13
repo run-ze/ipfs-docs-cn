@@ -3,11 +3,27 @@ pipeline {
   stages {
     stage('Build') {
       steps { node(label: 'linux') {
-        ansiColor('xterm') {
+        ansiColor('xterm') { withEnv(["TERM=xterm-color"]) { timeout(time: 15, unit: 'MINUTES') {
           checkout scm
           sh 'docker run -i -v `pwd`:/site ipfs/ci-websites make -C /site build'
-        }
-      }}
+          sh 'curl https://dist.ipfs.io/go-ipfs/v0.4.13/go-ipfs_v0.4.13_linux-amd64.tar.gz | gunzip | tar -x'
+          sh('go-ipfs/ipfs add -Q -r /site/public')
+          // def url = new URL("https://hub.docker.com/v2/repositories/${imgName}/tags")
+          // def parsedJSON = parseJSON(url.getText()
+        }}}}
+        step([
+          $class: 'GitHubCommitStatusSetter',
+          errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+          statusResultSource: [
+            $class: 'ConditionalStatusResultSource',
+            results: [
+              [$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: currentBuild.description],
+              [$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: currentBuild.description],
+              [$class: 'AnyBuildResult', state: 'FAILURE', message: 'Loophole']
+            ]
+          ]
+        ])
+      }
     }
   }
 }

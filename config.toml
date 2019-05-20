@@ -1,10 +1,11 @@
-baseURL = "https://docs.ipfs.io"
+baseURL = "https://ipfs.zh-cn.help"
 relativeURLs = true
-languageCode = "en"
-DefaultContentLanguage = "en"
-title = "IPFS Documentation"
+languageCode = "zh-cn"
+DefaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
+title = "IPFS 中文文档"
 staticDir = ["static", "build"]
-googleAnalytics = "UA-96910779-6"
+# googleAnalytics = "UA-96910779-6"
 
 [privacy]
   [privacy.googleAnalytics]
@@ -15,7 +16,7 @@ googleAnalytics = "UA-96910779-6"
 hrefTargetBlank = true
 
 [params]
-editURL = "https://github.com/ipfs/docs/tree/master/content/"
+editURL = "https://github.com/run-ze/ipfs-docs-cn/tree/master/content/"
 ordersectionsby = "weight" # ordersectionsby = "title"
 
 [outputs]

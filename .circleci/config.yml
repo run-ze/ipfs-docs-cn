@@ -48,6 +48,8 @@ jobs:
 
             echo "$note" > circle-count
 
+            echo "ipfs.zh-cn.help" > CNAME
+
             git add .
 
             git commit -m "$note"

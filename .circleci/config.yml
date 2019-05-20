@@ -20,7 +20,7 @@ jobs:
     docker:
       - image: olizilla/ipfs-dns-deploy:latest
         environment:
-          DOMAIN: zh-cn.help
+          DOMAIN: ipfs.zh-cn.help
           BUILD_DIR: public
     steps:
       - attach_workspace:

@@ -1,14 +1,13 @@
 ---
-title: Making Your Own IPFS Service
+title: 创建自己的 IPFS 服务
 ---
 
-ipfs has a few default services that it runs by default, such as the dht,
-bitswap, and the diagnostics service. Each of these simply registers a
-handler on the ipfs PeerHost, and listens on it for new connections.  The
-`corenet` package has a very clean interface to this functionality. So lets
-try building an easy demo service to try this out!
+ipfs 会运行一些默认服务，比如 dht、bitswap 和诊断程序。
+它们都只是在 ipfs PeerHost 上注册了一个处理程序，用来监听新连接。
+对于这个功能，`corenet` 包有着非常简洁的接口。
+所以让我们尝试构建一个简单的演示服务来尝试一下！
 
-Lets start by building the service host:
+让我们从构建服务主机开始：
 
 ```
 package main
@@ -24,10 +23,10 @@ import (
 )
 ```
 
-We dont need too many imports for this.
-Now, the only other thing we need is our main function:
+我们不需要为此导入太多依赖。
+现在，我们只需要一个 main 函数：
 
-Set up an ipfsnode.
+启动一个 ipfs 节点：
 
 ```
 func main() {
@@ -52,10 +51,9 @@ func main() {
 	}
 ```
 
-Thats just the basic template of code to initiate a default ipfsnode from
-the config in the users `~/.ipfs` directory.
+这只是使用用户的 `~/.ipfs` 目录中的配置启动默认 ipfs 节点的基本代码模板。
 
-Next, we are going to build our service.
+接下来，我们将开始构建我们的服务。
 
 ```
 	list, err := corenet.Listen(nd, "/app/whyrusleeping")
@@ -80,12 +78,11 @@ Next, we are going to build our service.
 }
 ```
 
-And thats really all you need to write a service on top of ipfs. When a client
-connects, we send them our greeting, print their peer ID to our log, and close
-the session. This is the simplest possible service, and you can really write
-anything you want to handle the connection.
+这就是在 ipfs 之上编写服务所需的全部代码。
+当一个客户端连接时，我们向它们发送问候，打印出它的节点 ID，然后关闭回话。
+这是最简单的服务，你可以按照自己的想法写代码处理连接。
 
-Now we need a client to connect to us:
+现在我们需要一个客户端来连接我们：
 
 ```
 package main
@@ -145,29 +142,29 @@ func main() {
 }
 ```
 
-This client will set up their ipfs node (note: this is moderately expensive and
-you normally wont just spin up an instance for a single connection) and dial the
-service we just created.
+这个客户端会建立它的 ipfs 节点（注意：建立节点的成本有些高，你一般无需为每次连接建立一个 ipfs 实例），
+然后连接到我们刚刚建立的节点。
 
-To try it out, run the following on one computer:
+要尝试一下，在一个电脑上运行下面的命令：
 ```
-$ ipfs init # if you havent already
+$ ipfs init # 如果你没有已经启动了一个 ipfs 实例
 $ go run host.go
 ```
 
-That should print out that peers ID, copy it and use it on a second machine:
+这应该会打印出它的节点 ID，复制它以便在另一台机子上使用：
 ```
-$ ipfs init # if you havent already
+$ ipfs init # 如果你没有已经启动了一个 ipfs 实例
 $ go run client.go <peerID>
 ```
 
 It should print out `Hello! This is whyrusleepings awesome ipfs service`
+这会打印出 `Hello! This is whyrusleepings awesome ipfs service`。
 
-Now, you might be asking yourself: "Why would I use this? How is it better than
-the `net` package?". Well, here are the advantages:
+现在，你可能会疑惑：“我为什么要用这个？它比 `net` 包好在哪儿？”
+下面是它的好处：
 
-1. You dial a specific peerID, no matter what their IP address happens to be at the moment.
-2. You take advantage of the NAT traversal built into our net package.
-3. Instead of a 'port' number, you get a much more meaningful protocol ID string.
+1. 不管一个节点的 IP 如何改变，你都能连接到它。
+2. 你利用了我们的软件包的 NAT 穿透的优点。
+3. 你得到了一个更有意义的协议 ID 文字而非一个端口数。
 
 By [whyrusleeping](http://github.com/whyrusleeping)
